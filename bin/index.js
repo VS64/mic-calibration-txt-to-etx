@@ -32,11 +32,11 @@ const outputFilename = ((customFilename) => {
     if (customFilename && formatIndex !== 0) {
         return formatIndex != -1 ? customFilename : customFilename + '.etx';
     } 
-    return `${options.microphone ? options.microphone + '-' : ''}${sampleRate} Hz-${fftSize} points${correctionThreshold ? '-' + correctionThreshold + ' db threshold' : ''}.etx`;
+    return `${options.microphone ? options.microphone : sourceFilename.replace('.txt', '')}-${sampleRate} Hz-${fftSize} points${correctionThreshold ? '-' + correctionThreshold + ' db threshold' : ''}.etx`;
 })(options.outputFile);
 const step = sampleRate / fftSize;
 let frequencyIndex = 0;
-let buffer = "* SDA\tetx\n\n* SampleRate [Hz]\t" + sampleRate + "\n* DataType\tFrequency (Real + Imag)\n* DataSubType\tNot Specified\n* Unit\tNormalized\n* X-Values\tyes\n* Complex\tyes\n* TimeSamples\t" + fftSize + "\n* Data\t" + (sampleRate / 2 / step) + "\n";
+let buffer = "* SDA\tetx\n\n* SampleRate [Hz]\t" + sampleRate + "\n* DataType\tFrequency (Real + Imag)\n* DataSubType\tNot Specified\n* Unit\tNormalized\n* X-Values\tyes\n* Complex\tyes\n* TimeSamples\t" + fftSize + "\n* Data\t" + (sampleRate / 2 / step) + "\nHz\tNormalized\tNormalized\n";
 const frequencyTable = [];
 const correctionTable = [];
 
