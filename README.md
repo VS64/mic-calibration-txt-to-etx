@@ -10,7 +10,8 @@ Utility to convert microphone calibration file from .txt to .etx format for usag
 
 ## Installing
 
-  
+### Prerequisites
+- Node.js 16.0 or higher (https://nodejs.org/en/download/package-manager)
 
 To install it, simply run one of the following commands :
 
