@@ -36,7 +36,7 @@ const outputFilename = ((customFilename) => {
 })(options.outputFile);
 const step = sampleRate / fftSize;
 let frequencyIndex = 0;
-let buffer = "* SDA\tetx\n\n* SampleRate [Hz]\t" + sampleRate + "\n* DataType\tFrequency (Real + Imag)\n* DataSubType\tNot Specified\n* Unit\tNormalized\n* X-Values\tyes\n* Complex\tyes\n* TimeSamples\t" + fftSize + "\n* Data\t" + (sampleRate / 2 / step) + "\nHz\tNormalized\tNormalized\n";
+let buffer = "* SDA\tetx\r\n\r\n* SampleRate [Hz]\t" + sampleRate + "\r\n* DataType\tFrequency (Real + Imag)\r\n* DataSubType\tNot Specified\r\n* Unit\tNormalized\r\n* X-Values\tyes\r\n* Complex\tyes\r\n* TimeSamples\t" + fftSize + "\r\n* Data\t" + (sampleRate / 2 / step) + "\r\nHz\tNormalized\tNormalized\r\n";
 const frequencyTable = [];
 const correctionTable = [];
 
@@ -92,8 +92,9 @@ function calculateRatio(target) {
 }
 
 while (frequencyIndex <= (sampleRate / 2)) {
-    buffer += frequencyIndex + "\t" + calculateRatio(frequencyIndex) + "\t0\n";
+    buffer += frequencyIndex + "\t" + calculateRatio(frequencyIndex) + "\t0\r\n";
     frequencyIndex += step;
 }
 
+buffer += '* EOF\r\n'
 writeFileSync(outputFilename, buffer);
