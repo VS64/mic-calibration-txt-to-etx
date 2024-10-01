@@ -5,13 +5,13 @@
 
 Utility to convert microphone calibration file from .txt to .etx format for usage in AFMG EASERA ans SysTune.
 
-  
-  
 
-## Installing
+## Prerequisites
 
-### Prerequisites
 - Node.js 16.0 or higher (https://nodejs.org/en/download/package-manager)
+
+  
+## Installing
 
 To install it, simply run one of the following commands :
 
@@ -26,7 +26,7 @@ pnpm add  -g  mic-calibration-txt-to-etx
 ```
 
   
-  
+
 
 ## Usage
 
