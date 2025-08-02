@@ -1,6 +1,6 @@
 {
   "name": "mic-calibration-txt-to-etx",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "Convert microphone calibration file from txt to etx",
   "main": "bin/index.js",
   "bin": {
@@ -11,6 +11,7 @@
   "license": "GNU AGPLv3",
   "type": "module",
   "dependencies": {
-    "commander": "^12.1.0"
-  }
+    "commander": "^14.0.0"
+  },
+  "packageManager": "pnpm@10.14.0+sha256.297534e65d5842450539c1e8022c8831ab5e1fe2eb74664787a815519542d620"
 }

@@ -9,7 +9,7 @@ const program = new Command();
 
 program.name('mic-cal-txt-to-etx')
     .alias('mctte')
-    .version('1.0.0')
+    .version('1.1.4')
     .description('Convert microphone calibration file from txt to etx')
     .usage('mic-calibration-file.txt')
     .argument('<filename>', 'source cablibration file')
@@ -23,17 +23,24 @@ program.parse();
 
 const options = program.opts();
 
+if (!program.args[0].match('.txt$')) {
+    console.log('Only .txt calibration files supported.');
+    process.exit();
+}
+
 const sourceFilename = program.args[0];
 const sampleRate = options.sampleRate;
 const fftSize = options.fftSize;
 const correctionThreshold = Math.abs(options.correctionThreshold);
+
 const outputFilename = ((customFilename) => {
     const formatIndex = customFilename?.indexOf('.etx');
     if (customFilename && formatIndex !== 0) {
         return formatIndex != -1 ? customFilename : customFilename + '.etx';
-    } 
+    }
     return `${options.microphone ? options.microphone : sourceFilename.replace('.txt', '')}-${sampleRate} Hz-${fftSize} points${correctionThreshold ? '-' + correctionThreshold + ' db threshold' : ''}.etx`;
 })(options.outputFile);
+
 const step = sampleRate / fftSize;
 let frequencyIndex = 0;
 let buffer = "* SDA\tetx\r\n\r\n* SampleRate [Hz]\t" + sampleRate + "\r\n* DataType\tFrequency (Real + Imag)\r\n* DataSubType\tNot Specified\r\n* Unit\tNormalized\r\n* X-Values\tyes\r\n* Complex\tyes\r\n* TimeSamples\t" + fftSize + "\r\n* Data\t" + ((sampleRate / 2 / step) + 1) + "\r\nHz\tNormalized\tNormalized\r\n";
@@ -42,17 +49,18 @@ const correctionTable = [];
 
 const calibrationFileData = readFileSync(sourceFilename, {encoding: 'utf8'}).replaceAll('\r', '').split("\n");
 
+let lineData;
 for (let line of calibrationFileData) {
     if (line.charAt(0) != ';') {
-        if ((line = line.split('\t'))[0]) {
-            frequencyTable.push(parseInt(line[0]));
-            correctionTable.push(parseFloat(line[1]));
+        if (lineData = line.match('([0-9]+\.[0-9]+)[\t\s]+(-?[0-9]+\.[0-9]+)')) {
+            frequencyTable.push(parseInt(lineData[1]));
+            correctionTable.push(parseFloat(lineData[2]));
         }
     }
 }
 
 function findClosest(source, target) {
-    let closestIndex = 0; 
+    let closestIndex = 0;
     for (let i = 1; i < source.length; i++) {
         if (Math.abs(source[i] - target) < Math.abs(source[closestIndex] - target)) {
             closestIndex = i;
