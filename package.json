@@ -1,6 +1,6 @@
 {
   "name": "mic-calibration-txt-to-etx",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Convert microphone calibration file from txt to etx",
   "main": "bin/index.js",
   "bin": {

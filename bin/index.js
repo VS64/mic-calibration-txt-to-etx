@@ -3,19 +3,31 @@
 
 import { readFileSync, writeFileSync } from 'node:fs';
 
-import { Command } from 'commander';
+import { Command, InvalidArgumentError } from 'commander';
 
 const program = new Command();
 
+function validateNumberInput(parsingFunction, greaterThanOrEqual) {
+    return (nb) => {
+        if (isNaN((nb = parsingFunction(nb.replace(',', '.'))))) {
+            throw new InvalidArgumentError('Not a number.');
+        }
+        if (nb < greaterThanOrEqual) {
+            throw new InvalidArgumentError(`Must be greater than or equal to ${greaterThanOrEqual}.`);
+        }
+        return nb;
+    }
+}
+
 program.name('mic-cal-txt-to-etx')
     .alias('mctte')
-    .version('1.1.4')
+    .version('1.1.5')
     .description('Convert microphone calibration file from txt to etx')
     .usage('mic-calibration-file.txt')
     .argument('<filename>', 'source cablibration file')
-    .option('-s, --sample-rate <number>', 'sample rate (Hz)', 48000)
-    .option('-f, --fft-size <number>', 'Fast Fourier Transform number of points', 65536)
-    .option('-t, --correction-threshold <number>', 'correction threshold (dB)', 0)
+    .option('-s, --sample-rate <number>', 'sample rate (Hz)', validateNumberInput(parseInt, 41000), 48000)
+    .option('-f, --fft-size <number>', 'Fast Fourier Transform number of points', validateNumberInput(parseInt, 128), 65536)
+    .option('-t, --correction-threshold <number>', 'correction threshold (dB)', validateNumberInput(parseFloat, 0), 0)
     .option('-m, --microphone <string>', 'microphone reference')
     .option('-o, --output-file <string>', 'custom output filename');
 
@@ -27,6 +39,8 @@ if (!program.args[0].match('.txt$')) {
     console.log('Only .txt calibration files supported.');
     process.exit();
 }
+
+
 
 const sourceFilename = program.args[0];
 const sampleRate = options.sampleRate;
