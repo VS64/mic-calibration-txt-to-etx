@@ -3,7 +3,7 @@
 
   
 
-Utility to convert microphone calibration file from .txt to .etx format for usage in AFMG EASERA ans SysTune.
+Utility to convert microphone calibration file from .txt to .etx format for usage in AFMG EASERA and SysTune.
 
 
 ## Prerequisites
